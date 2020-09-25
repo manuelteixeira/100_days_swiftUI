@@ -8,14 +8,24 @@
 
 import SwiftUI
 
+struct BigTitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle)
+            .foregroundColor(.blue)
+    }
+}
+
+extension View {
+    func bigTitle() -> some View {
+        return self.modifier(BigTitle())
+    }
+}
+
 struct ContentView: View {
-    @State private var useRedText = false
-    
     var body: some View {
-        Button("Hello world") {
-            self.useRedText.toggle()
-        }
-        .foregroundColor(useRedText ? .red : .blue)
+        Text("Hello world")
+            .bigTitle()
     }
 }
 
