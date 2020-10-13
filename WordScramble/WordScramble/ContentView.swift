@@ -17,6 +17,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var score = 0
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -29,12 +31,20 @@ struct ContentView: View {
                     Image(systemName: "\($0.count).circle")
                     Text($0)
                 }
+                
+                Text("Your score is \(score)")
+                    .font(.headline)
             }
             .navigationBarTitle(rootWord)
             .onAppear(perform: startGame)
             .alert(isPresented: $showingError) { () -> Alert in
                 Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("Ok")))
             }
+            .navigationBarItems(trailing:
+                Button(action: startGame) {
+                    Text("New word")
+                }
+            )
         }
     }
     
@@ -42,6 +52,11 @@ struct ContentView: View {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
         guard answer.count > 0 else { return }
+        
+        guard isDifferent(word: answer) else {
+            wordError(title: "Words is the same as the root word", message: "Just think a little")
+            return
+        }
         
         guard isOriginal(word: answer) else {
             wordError(title: "Word used already", message: "Be more original")
@@ -58,8 +73,14 @@ struct ContentView: View {
             return
         }
         
+        updateScore(word: answer)
+        
         usedWords.insert(answer, at: 0)
         newWord = ""
+    }
+    
+    func updateScore(word: String) {
+        score += 1 + word.count
     }
     
     func startGame() {
@@ -93,12 +114,18 @@ struct ContentView: View {
     }
     
     func isReal(word: String) -> Bool {
+        guard word.count > 3 else { return false }
+        
         let checker = UITextChecker()
         let range = NSRange(location: 0, length: word.utf16.count)
         
         let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
         
         return misspelledRange.location == NSNotFound
+    }
+    
+    func isDifferent(word: String) -> Bool {
+        return word != rootWord
     }
     
     
