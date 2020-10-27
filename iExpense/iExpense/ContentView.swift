@@ -8,22 +8,75 @@
 
 import SwiftUI
 
-struct User: Codable {
-    var firstName: String
-    var lastName: String
+struct ExpenseItem: Identifiable, Codable {
+    let id = UUID()
+    let name: String
+    let type: String
+    let amount: Int
+}
+
+class Expenses: ObservableObject {
+    @Published var items = [ExpenseItem]() {
+        didSet {
+            let encoder = JSONEncoder()
+
+            if let encoded = try? encoder.encode(items) {
+                UserDefaults.standard.set(encoded, forKey: "Items")
+            }
+        }
+    }
+
+    init() {
+        if let items = UserDefaults.standard.data(forKey: "Items") {
+            let decoder = JSONDecoder()
+
+            if let decoded = try? decoder.decode([ExpenseItem].self, from: items) {
+                self.items = decoded
+                return
+            }
+        }
+
+        items = []
+    }
 }
 
 struct ContentView: View {
-    @State private var user = User(firstName: "Taylor", lastName: "Swift")
+    @ObservedObject var expenses = Expenses()
+    @State private var showingAddExpense = false
 
     var body: some View {
-        Button("Save user") {
-            let encoder = JSONEncoder()
-            
-            if let data = try? encoder.encode(self.user) {
-                UserDefaults.standard.set(data, forKey: "UserData")
+        NavigationView {
+            List {
+                ForEach(expenses.items) { item in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(item.name)
+                                .font(.headline)
+                            Text(item.type)
+                        }
+                        
+                        Spacer()
+                        Text("$\(item.amount)")
+                    }
+                }
+                .onDelete(perform: removeItems)
             }
+            .navigationBarTitle("iExpense")
+            .navigationBarItems(trailing:
+                Button(action: {
+                    self.showingAddExpense = true
+                }, label: {
+                    Image(systemName: "plus")
+                })
+            )
         }
+        .sheet(isPresented: $showingAddExpense) {
+            AddView(expenses: self.expenses)
+        }
+    }
+
+    func removeItems(at offSets: IndexSet) {
+        expenses.items.remove(atOffsets: offSets)
     }
 }
 
