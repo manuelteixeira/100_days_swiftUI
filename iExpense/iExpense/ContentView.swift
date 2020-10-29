@@ -54,20 +54,25 @@ struct ContentView: View {
                                 .font(.headline)
                             Text(item.type)
                         }
-                        
+
                         Spacer()
                         Text("$\(item.amount)")
+                            .font(self.fontStyle(for: item.amount))
+                            .foregroundColor(self.fontColor(for: item.amount))
                     }
                 }
                 .onDelete(perform: removeItems)
             }
             .navigationBarTitle("iExpense")
-            .navigationBarItems(trailing:
+            .navigationBarItems(leading:
+                EditButton()
+                , trailing:
                 Button(action: {
                     self.showingAddExpense = true
                 }, label: {
                     Image(systemName: "plus")
-                })
+                }
+                )
             )
         }
         .sheet(isPresented: $showingAddExpense) {
@@ -77,6 +82,28 @@ struct ContentView: View {
 
     func removeItems(at offSets: IndexSet) {
         expenses.items.remove(atOffsets: offSets)
+    }
+    
+    func fontStyle(for amount: Int) -> Font {
+        switch amount {
+        case 0 ... 10:
+            return .caption
+        case 11 ... 100:
+            return .body
+        default:
+            return .headline
+        }
+    }
+    
+    func fontColor(for amount: Int) -> Color {
+        switch amount {
+        case 0 ... 10:
+            return .gray
+        case 11 ... 100:
+            return .black
+        default:
+            return .red
+        }
     }
 }
 
