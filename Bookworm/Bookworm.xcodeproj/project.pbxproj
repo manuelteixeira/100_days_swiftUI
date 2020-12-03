@@ -17,6 +17,7 @@
 		6FE7607A2567B04C0029FC68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6FE760792567B04C0029FC68 /* Assets.xcassets */; };
 		6FE7607D2567B04C0029FC68 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6FE7607C2567B04C0029FC68 /* Preview Assets.xcassets */; };
 		6FE760802567B04C0029FC68 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6FE7607E2567B04C0029FC68 /* LaunchScreen.storyboard */; };
+		6FF4E5D92578E28200EB3696 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FF4E5D82578E28200EB3696 /* DetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		6FE7607C2567B04C0029FC68 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6FE7607F2567B04C0029FC68 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6FE760812567B04C0029FC68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6FF4E5D82578E28200EB3696 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 				6F11170E257785C40023DAF0 /* RatingView.swift */,
 				6F111711257788BE0023DAF0 /* EmojiRatingView.swift */,
 				6FE760792567B04C0029FC68 /* Assets.xcassets */,
+				6FF4E5D82578E28200EB3696 /* DetailView.swift */,
 				6FE7607E2567B04C0029FC68 /* LaunchScreen.storyboard */,
 				6FE760812567B04C0029FC68 /* Info.plist */,
 				6FE760762567B04C0029FC68 /* Bookworm.xcdatamodeld */,
@@ -159,6 +162,7 @@
 			files = (
 				6FE760712567B04C0029FC68 /* AppDelegate.swift in Sources */,
 				6FE760782567B04C0029FC68 /* Bookworm.xcdatamodeld in Sources */,
+				6FF4E5D92578E28200EB3696 /* DetailView.swift in Sources */,
 				6F111712257788BE0023DAF0 /* EmojiRatingView.swift in Sources */,
 				6FE760732567B04C0029FC68 /* SceneDelegate.swift in Sources */,
 				6F11170F257785C40023DAF0 /* RatingView.swift in Sources */,
