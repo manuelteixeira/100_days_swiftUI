@@ -48,12 +48,14 @@ struct AddBookView: View {
                         newBook.rating = Int16(self.rating)
                         newBook.genre = self.genre
                         newBook.review = self.review
+                        newBook.date = Date()
                         
                         try? self.moc.save()
                         
                         self.presentationMode.wrappedValue.dismiss()
                     }
                 }
+                .disabled(genre.isEmpty)
             }
             .navigationBarTitle("Add book")
         }

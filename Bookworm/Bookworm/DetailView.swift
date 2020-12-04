@@ -14,6 +14,16 @@ struct DetailView: View {
     @State private var showingDeleteAlert = false
 
     let book: Book
+    
+    var formattedDate: String {
+        guard let date = book.date else { return "Invalid date" }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        
+        return dateFormatter.string(from: date)
+    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -41,6 +51,10 @@ struct DetailView: View {
 
                 RatingView(rating: .constant(Int(self.book.rating)))
                     .font(.largeTitle)
+                
+                Text(formattedDate)
+                    .font(.caption)
+                    .padding()
 
                 Spacer()
             }
@@ -77,6 +91,7 @@ struct DetailView_Previews: PreviewProvider {
         book.genre = "Fantasy"
         book.rating = 4
         book.review = "This was a great book."
+        book.date = Date()
         return DetailView(book: book)
     }
 }

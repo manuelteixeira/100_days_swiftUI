@@ -16,6 +16,7 @@ struct ContentView: View {
     ]) var books: FetchedResults<Book>
 
     @State private var showingAddScreen = false
+    private let minimumRating = 1
 
     var body: some View {
         NavigationView {
@@ -28,6 +29,7 @@ struct ContentView: View {
                         VStack(alignment: .leading) {
                             Text(book.title ?? "Unknown title")
                                 .font(.headline)
+                                .foregroundColor(book.rating == minimumRating ? Color.red : Color.black)
 
                             Text(book.author ?? "Unknown author")
                                 .foregroundColor(.secondary)
