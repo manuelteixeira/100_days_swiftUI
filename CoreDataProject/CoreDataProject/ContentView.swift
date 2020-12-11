@@ -2,40 +2,50 @@
 //  ContentView.swift
 //  CoreDataProject
 //
-//  Created by Manuel Teixeira on 09/12/2020.
+//  Created by Manuel Teixeira on 11/12/2020.
 //
 
 import SwiftUI
-import CoreData
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var moc
-    @FetchRequest(entity: Ship.entity(), sortDescriptors: [], predicate: NSPredicate(format: "name BEGINSWITH %@", "E")) var ships: FetchedResults<Ship>
+    @State private var lastNameFilter = "A"
+    @State private var sortAscending = true
 
     var body: some View {
         VStack {
-            List(ships, id: \.self) { ship in
-                Text(ship.name ?? "Unknown name")
+            let sortDescriptor = NSSortDescriptor(keyPath: \Singer.lastName, ascending: sortAscending)
+            
+            FilteredListView(filterKey: "lastName", filterValue: lastNameFilter, sortDescriptors: [sortDescriptor], predicate: .contains) { (singer: Singer) in
+                Text("\(singer.wrappedFirstName) \(singer.wrappedLastName)")
             }
 
             Button("Add Examples") {
-                let ship1 = Ship(context: self.moc)
-                ship1.name = "Enterprise"
-                ship1.universe = "Star Trek"
+                let taylor = Singer(context: self.moc)
+                taylor.firstName = "Taylor"
+                taylor.lastName = "Swift"
 
-                let ship2 = Ship(context: self.moc)
-                ship2.name = "Defiant"
-                ship2.universe = "Star Trek"
+                let ed = Singer(context: self.moc)
+                ed.firstName = "Ed"
+                ed.lastName = "Sheeran"
 
-                let ship3 = Ship(context: self.moc)
-                ship3.name = "Millennium Falcon"
-                ship3.universe = "Star Wars"
-
-                let ship4 = Ship(context: self.moc)
-                ship4.name = "Executor"
-                ship4.universe = "Star Wars"
+                let adele = Singer(context: self.moc)
+                adele.firstName = "Adele"
+                adele.lastName = "Adkins"
 
                 try? self.moc.save()
+            }
+
+            Button("Show A") {
+                self.lastNameFilter = "A"
+            }
+
+            Button("Show S") {
+                self.lastNameFilter = "S"
+            }
+            
+            Button("Sort \(sortAscending ? "descending" : "ascending")") {
+                self.sortAscending.toggle()
             }
         }
     }
