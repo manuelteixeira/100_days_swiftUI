@@ -8,36 +8,44 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var users = [User]()
+    @Environment(\.managedObjectContext) var moc
+    @FetchRequest(entity: User.entity(), sortDescriptors: []) var users: FetchedResults<User>
     
     var body: some View {
-        List(users, id: \.id) { user in
-            VStack {
-                Text(user.name)
-                Text("\(user.age)")
-                Text(user.email)
-                Text(user.about)
-                Text(user.address)
-                Text(user.company)
-                Text(user.formattedDate)
+        NavigationView {
+            List(users, id: \.id) { user in
+                NavigationLink(destination: DetailView(user: user)) {
+                    VStack(alignment: .leading) {
+                        Text(user.wrappedName)
+                            .font(.headline)
+                        Text("\(user.age)")
+                        Text(user.wrappedEmail)
+                            .font(.subheadline)
+                    }
+                }
             }
+            .onAppear(perform: loadData)
+            .navigationBarTitle("Users")
         }
-        .onAppear(perform: loadData)
     }
     
     func loadData() {
-        let url = URL(string: "https://www.hackingwithswift.com/samples/friendface.json")
-        let request = URLRequest(url: url!)
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else { return }
+        if users.isEmpty {
+            let url = URL(string: "https://www.hackingwithswift.com/samples/friendface.json")
+            let request = URLRequest(url: url!)
             
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            if let decodedUsers = try? decoder.decode([User].self, from: data) {
-                users = decodedUsers
-            }
-        }.resume()
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data else { return }
+                
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                decoder.userInfo[CodingUserInfoKey.context!] = self.moc
+                if let decodedUsers = try? decoder.decode([User].self, from: data) {
+                    print(decodedUsers)
+                }
+                
+            }.resume()
+        }
     }
 }
 
