@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6F7E751E25A45DED002AE5D3 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F7E751D25A45DED002AE5D3 /* ImagePicker.swift */; };
 		6F8C4B5625A30393007D2239 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F8C4B5525A30393007D2239 /* AppDelegate.swift */; };
 		6F8C4B5825A30393007D2239 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F8C4B5725A30393007D2239 /* SceneDelegate.swift */; };
 		6F8C4B5A25A30393007D2239 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F8C4B5925A30393007D2239 /* ContentView.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6F7E751D25A45DED002AE5D3 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		6F8C4B5225A30393007D2239 /* Instafilter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Instafilter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F8C4B5525A30393007D2239 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6F8C4B5725A30393007D2239 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				6F8C4B5525A30393007D2239 /* AppDelegate.swift */,
 				6F8C4B5725A30393007D2239 /* SceneDelegate.swift */,
 				6F8C4B5925A30393007D2239 /* ContentView.swift */,
+				6F7E751D25A45DED002AE5D3 /* ImagePicker.swift */,
 				6F8C4B5E25A30393007D2239 /* Assets.xcassets */,
 				6F8C4B6325A30393007D2239 /* LaunchScreen.storyboard */,
 				6F8C4B6625A30393007D2239 /* Info.plist */,
@@ -150,6 +153,7 @@
 			files = (
 				6F8C4B5625A30393007D2239 /* AppDelegate.swift in Sources */,
 				6F8C4B5D25A30393007D2239 /* Instafilter.xcdatamodeld in Sources */,
+				6F7E751E25A45DED002AE5D3 /* ImagePicker.swift in Sources */,
 				6F8C4B5825A30393007D2239 /* SceneDelegate.swift in Sources */,
 				6F8C4B5A25A30393007D2239 /* ContentView.swift in Sources */,
 			);
