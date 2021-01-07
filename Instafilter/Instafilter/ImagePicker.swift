@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ImagePicker: UIViewControllerRepresentable {
     class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        var parent: ImagePicker
+        let parent: ImagePicker
         
         init(_ parent: ImagePicker) {
             self.parent = parent
@@ -24,8 +24,8 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
     }
     
-    @Binding var image: UIImage?
     @Environment(\.presentationMode) var presentationMode
+    @Binding var image: UIImage?
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
