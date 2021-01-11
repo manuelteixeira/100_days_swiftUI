@@ -12,9 +12,12 @@ import SwiftUI
 struct ContentView: View {
     @State private var image: Image?
     @State private var filterIntensity = 0.5
+    @State private var filterRadius = 100.0
+    @State private var filterScale = 10.0
 
     @State private var showingFilterSheet = false
     @State private var showingImagePicker = false
+    @State private var showingSaveError = false
     @State private var inputImage: UIImage?
     @State private var processedImage: UIImage?
 
@@ -28,6 +31,26 @@ struct ContentView: View {
             },
             set: {
                 self.filterIntensity = $0
+                self.applyProcessing()
+            }
+        )
+
+        let radius = Binding<Double>(
+            get: {
+                self.filterRadius
+            },
+            set: {
+                self.filterRadius = $0
+                self.applyProcessing()
+            }
+        )
+
+        let scale = Binding<Double>(
+            get: {
+                self.filterScale
+            },
+            set: {
+                self.filterScale = $0
                 self.applyProcessing()
             }
         )
@@ -56,27 +79,40 @@ struct ContentView: View {
                     Text("Intensity")
                     Slider(value: intensity)
                 }
+
+                HStack {
+                    Text("Radius")
+                    Slider(value: radius, in: 0.0...100, step: 10)
+                }
+
+                HStack {
+                    Text("Scale")
+                    Slider(value: scale, in: 0.0...100, step: 10)
+                }
                 .padding(.vertical)
 
                 HStack {
-                    Button("Change filter") {
+                    Button("\(currentFilter.name)") {
                         self.showingFilterSheet = true
                     }
 
                     Spacer()
 
                     Button("Save") {
-                        guard let processedImage = self.processedImage else { return }
-                        
+                        guard let processedImage = self.processedImage else {
+                            showingSaveError = true
+                            return
+                        }
+
                         let imageSaver = ImageSaver()
                         imageSaver.successHandler = {
                             print("Success")
                         }
-                        
+
                         imageSaver.errorHandler = {
                             print("Error \($0.localizedDescription)")
                         }
-                        
+
                         imageSaver.writeToPhotoAlbum(image: processedImage)
                     }
                 }
@@ -112,6 +148,9 @@ struct ContentView: View {
                     .cancel()
                 ])
             }
+            .alert(isPresented: $showingSaveError) {
+                Alert(title: Text("Save Error"), message: Text("No image selected, please select one image"), dismissButton: .default(Text("Ok")))
+            }
         }
     }
 
@@ -130,11 +169,11 @@ struct ContentView: View {
         }
 
         if inputKeys.contains(kCIInputRadiusKey) {
-            currentFilter.setValue(filterIntensity * 200, forKey: kCIInputRadiusKey)
+            currentFilter.setValue(filterRadius, forKey: kCIInputRadiusKey)
         }
 
         if inputKeys.contains(kCIInputScaleKey) {
-            currentFilter.setValue(filterIntensity * 10, forKey: kCIInputScaleKey)
+            currentFilter.setValue(filterScale, forKey: kCIInputScaleKey)
         }
 
         guard let outputImage = currentFilter.outputImage else { return }
