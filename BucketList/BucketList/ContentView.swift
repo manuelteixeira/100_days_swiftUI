@@ -5,6 +5,7 @@
 //  Created by Manuel Teixeira on 12/01/2021.
 //
 
+import LocalAuthentication
 import SwiftUI
 
 struct LoadingView: View {
@@ -26,35 +27,40 @@ struct FailedView: View {
 }
 
 struct ContentView: View {
-    enum LoadingState {
-        case loading, success, failed
-    }
-
-    var loadingState = LoadingState.loading
-
+    @State private var isUnlocked = false
+    
     var body: some View {
-        Text("Hello")
-            .onTapGesture {
-                let str = "Test message"
-                let url = FileManager.getDocumentsDirectory().appendingPathComponent("message.txt")
-
-                do {
-                    try str.write(to: url, atomically: true, encoding: .utf8)
-                    let input = try String(contentsOf: url)
-                    print(input)
-                } catch {
-                    print(error.localizedDescription)
+        VStack {
+            if self.isUnlocked {
+                Text("Unlocked")
+            } else {
+                Text("Locked")
+            }
+        }
+        .onAppear(perform: authenticate)
+        MapView()
+            .edgesIgnoringSafeArea(.all)
+    }
+    
+    func authenticate() {
+        let context = LAContext()
+        var error: NSError?
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            
+            let reason = "We need to unlock your data."
+            
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, autheticateError in
+                DispatchQueue.main.async {
+                    if success {
+                        isUnlocked = true
+                    } else {
+                        
+                    }
                 }
             }
-        
-        Group {
-            if loadingState == .loading {
-                LoadingView()
-            } else if loadingState == .success {
-                SuccessView()
-            } else if loadingState == .failed {
-                
-            }
+        } else {
+            // No biometrics
         }
     }
 }
