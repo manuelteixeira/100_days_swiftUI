@@ -10,48 +10,36 @@ import MapKit
 import SwiftUI
 
 struct ContentView: View {
-    @State private var centerCoordinate = CLLocationCoordinate2D()
+    @State private var isUnlocked = false
     @State private var locations = [CodableMKPointAnnotation]()
     @State private var selectedPlace: MKPointAnnotation?
     @State private var showingPlaceDetails = false
     @State private var showingEditScreen = false
-    @State private var isUnlocked = false
+
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
+    @State private var showingErrorAlert = false
 
     var body: some View {
+        // Possible swiftUI Bug
+        // This binding shouldn't be necessary, we should just need to pass $selectedPlace to MainView
+        let selectedPlaceBinding = Binding(
+            get: { selectedPlace },
+            set: { selectedPlace = $0 }
+        )
+
         ZStack {
             if isUnlocked {
-                MapView(centerCoordinate: $centerCoordinate, selectedPlace: $selectedPlace, showingPlaceDetails: $showingPlaceDetails, annotations: locations)
-                    .edgesIgnoringSafeArea(.all)
-
-                Circle()
-                    .fill(Color.blue)
-                    .opacity(0.3)
-                    .frame(width: 32, height: 32)
-
-                VStack {
-                    Spacer()
-
-                    HStack {
-                        Spacer()
-
-                        Button(action: {
-                            let newLocation = CodableMKPointAnnotation()
-                            newLocation.coordinate = self.centerCoordinate
-                            newLocation.title = "Example location"
-                            self.locations.append(newLocation)
-
-                            self.selectedPlace = newLocation
-                            self.showingEditScreen = true
-                        }) {
-                            Image(systemName: "plus")
-                        }
-                        .padding()
-                        .background(Color.black.opacity(0.75))
-                        .foregroundColor(.white)
-                        .font(.title)
-                        .clipShape(Circle())
-                        .padding(.trailing)
-                    }
+                MainView(
+                    locations: $locations,
+                    selectedPlace: selectedPlaceBinding,
+                    showingPlaceDetails: $showingPlaceDetails,
+                    showingEditScreen: $showingEditScreen
+                )
+                .alert(isPresented: $showingPlaceDetails) {
+                    Alert(title: Text(selectedPlace?.title ?? "Unknown"), message: Text(selectedPlace?.subtitle ?? "Missing place information"), primaryButton: .default(Text("OK")), secondaryButton: .default(Text("Edit")) {
+                        self.showingEditScreen = true
+                    })
                 }
             } else {
                 Button("Unlock places") {
@@ -61,14 +49,10 @@ struct ContentView: View {
                 .background(Color.blue)
                 .foregroundColor(.white)
                 .clipShape(Capsule())
+                .alert(isPresented: $showingErrorAlert, content: {
+                    Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("Ok")))
+                })
             }
-        }
-
-        .alert(isPresented: $showingPlaceDetails) {
-            Alert(title: Text(selectedPlace?.title ?? "Unknown"), message: Text(selectedPlace?.subtitle ?? "Missing place information"), primaryButton: .default(Text("OK")), secondaryButton: .default(Text("Edit")) {
-                self.showingEditScreen = true
-            }
-            )
         }
         .sheet(isPresented: $showingEditScreen, onDismiss: saveData) {
             if self.selectedPlace != nil {
@@ -113,11 +97,17 @@ struct ContentView: View {
                         self.isUnlocked = true
                     } else {
                         // Error
+                        self.alertTitle = "Error"
+                        self.alertMessage = "Access denied"
+                        self.showingErrorAlert = true
                     }
                 }
             }
         } else {
             // No Biometrics
+            alertTitle = "Error"
+            alertMessage = "No biometrics available"
+            showingErrorAlert = true
         }
     }
 }
