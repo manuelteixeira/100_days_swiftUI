@@ -37,6 +37,7 @@ struct ContentView: View {
                         Stepper(value: $sleepAmount, in: 4...12, step: 0.25) {
                             Text("\(sleepAmount, specifier: "%g") hours")
                         }
+                        .accessibility(value: Text("\(sleepAmount, specifier: "%g") hours with a minimum of 4 hours and a maximum of 12 hours."))
                     }
                     
                     Section(header: Text("Daily coffee intake")) {
