@@ -20,6 +20,8 @@ struct AstronautView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: geometry.size.width)
+                        .accessibility(label: Text(self.astronaut.name))
+
 
                     Text(self.astronaut.description)
                         .padding()
@@ -35,6 +37,8 @@ struct AstronautView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 80, height: 80)
+                                    .accessibility(removeTraits: .isImage)
+                                    .accessibility(addTraits: .isButton)
                             }
                         }
                         .padding([.leading, .trailing])

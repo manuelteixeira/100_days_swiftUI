@@ -42,6 +42,7 @@ struct MissionView: View {
                                     .frame(width: 83, height: 60)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                                     .shadow(radius: 10)
+                                    .accessibility(label: Text(crewMember.astronaut.name))
 
                                 VStack(alignment: .leading) {
                                     Text(crewMember.astronaut.name)
