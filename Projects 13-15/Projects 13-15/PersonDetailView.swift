@@ -32,6 +32,13 @@ struct PersonDetailView: View {
                     .shadow(radius: 10)
             }
             
+            MapView(location: .constant(person.wrappedLocation))
+                .frame(height: 300)
+                .clipShape(RoundedRectangle(cornerRadius: 30))
+                .padding(.top, 40)
+                .padding([.leading, .trailing, .bottom], 24)
+                .shadow(radius: 10)
+            
             Text(person.name)
                 .font(.title)
             
@@ -43,6 +50,6 @@ struct PersonDetailView: View {
 
 struct PersonDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        PersonDetailView(person: Person(id: UUID().uuidString, name: "Test", photo: Data()))
+        PersonDetailView(person: Person.mock)
     }
 }

@@ -27,6 +27,6 @@ struct PersonRowView: View {
 
 struct PersonRowView_Previews: PreviewProvider {
     static var previews: some View {
-        PersonRowView(person: Person(id: UUID().uuidString, name: "Text", photo: Data()))
+        PersonRowView(person: Person.mock)
     }
 }

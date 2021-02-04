@@ -53,6 +53,8 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your photo library in order to upload a photo.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need access to your location in order to provide a pin for the map</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

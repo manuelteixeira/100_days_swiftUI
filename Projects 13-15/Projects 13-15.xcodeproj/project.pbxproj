@@ -20,6 +20,8 @@
 		6F18AA2F25C9B96800C8FF88 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F18AA2E25C9B96800C8FF88 /* ImagePicker.swift */; };
 		6F18AA3225C9BCC900C8FF88 /* PersonUploadPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F18AA3125C9BCC900C8FF88 /* PersonUploadPhotoView.swift */; };
 		6F18AA3525C9BFEE00C8FF88 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F18AA3425C9BFEE00C8FF88 /* FileManager.swift */; };
+		6F568DBA25CC06CF00205305 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F568DB925CC06CF00205305 /* MapView.swift */; };
+		6FD1F8FC25CC0B86006C770F /* LocationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD1F8FB25CC0B86006C770F /* LocationFetcher.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		6F18AA2E25C9B96800C8FF88 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		6F18AA3125C9BCC900C8FF88 /* PersonUploadPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonUploadPhotoView.swift; sourceTree = "<group>"; };
 		6F18AA3425C9BFEE00C8FF88 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		6F568DB925CC06CF00205305 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		6FD1F8FB25CC0B86006C770F /* LocationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFetcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,8 +78,10 @@
 				6F18AA0525C9A99A00C8FF88 /* SceneDelegate.swift */,
 				6F18AA0725C9A99A00C8FF88 /* ContentView.swift */,
 				6F18AA3125C9BCC900C8FF88 /* PersonUploadPhotoView.swift */,
+				6FD1F8FB25CC0B86006C770F /* LocationFetcher.swift */,
 				6F18AA3425C9BFEE00C8FF88 /* FileManager.swift */,
 				6F18AA2E25C9B96800C8FF88 /* ImagePicker.swift */,
+				6F568DB925CC06CF00205305 /* MapView.swift */,
 				6F18AA2125C9AD3A00C8FF88 /* PersonDetailView.swift */,
 				6F18AA1E25C9AB4000C8FF88 /* PersonRowView.swift */,
 				6F18AA1B25C9A9E400C8FF88 /* Person.swift */,
@@ -168,7 +174,9 @@
 			files = (
 				6F18AA1C25C9A9E400C8FF88 /* Person.swift in Sources */,
 				6F18AA0425C9A99A00C8FF88 /* AppDelegate.swift in Sources */,
+				6FD1F8FC25CC0B86006C770F /* LocationFetcher.swift in Sources */,
 				6F18AA0B25C9A99A00C8FF88 /* Projects_13_15.xcdatamodeld in Sources */,
+				6F568DBA25CC06CF00205305 /* MapView.swift in Sources */,
 				6F18AA0625C9A99A00C8FF88 /* SceneDelegate.swift in Sources */,
 				6F18AA1F25C9AB4000C8FF88 /* PersonRowView.swift in Sources */,
 				6F18AA3525C9BFEE00C8FF88 /* FileManager.swift in Sources */,
