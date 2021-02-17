@@ -14,8 +14,14 @@ struct ProspectsView: View {
         case none, contacted, uncontacted
     }
 
+    enum SortFilter {
+        case name, mostRecent
+    }
+
     @EnvironmentObject var prospects: Prospects
     @State private var isShowingScanner = false
+    @State private var isShowingSort = false
+    @State private var sortFilter: SortFilter = .name
 
     let filter: FilterType
 
@@ -33,11 +39,32 @@ struct ProspectsView: View {
     var filterProspects: [Prospect] {
         switch filter {
         case .none:
-            return prospects.people
+            return prospects.people.sorted {
+                switch sortFilter {
+                case .name:
+                    return $0.name < $1.name
+                case .mostRecent:
+                    return $0.dateAdded < $1.dateAdded
+                }
+            }
         case .contacted:
-            return prospects.people.filter { $0.isContacted }
+            return prospects.people.filter { $0.isContacted }.sorted {
+                switch sortFilter {
+                case .name:
+                    return $0.name < $1.name
+                case .mostRecent:
+                    return $0.dateAdded < $1.dateAdded
+                }
+            }
         case .uncontacted:
-            return prospects.people.filter { !$0.isContacted }
+            return prospects.people.filter { !$0.isContacted }.sorted {
+                switch sortFilter {
+                case .name:
+                    return $0.name < $1.name
+                case .mostRecent:
+                    return $0.dateAdded < $1.dateAdded
+                }
+            }
         }
     }
 
@@ -45,34 +72,60 @@ struct ProspectsView: View {
         NavigationView {
             List {
                 ForEach(filterProspects) { prospect in
-                    VStack(alignment: .leading) {
-                        Text(prospect.name)
-                            .font(.headline)
-                        Text(prospect.emailAddress)
-                            .foregroundColor(.secondary)
-                    }
-                    .contextMenu(ContextMenu(menuItems: {
-                        Button(prospect.isContacted ? "Mark Uncontacted" : "Mark Contacted") {
-                            prospects.toggle(prospect)
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(prospect.name)
+                                .font(.headline)
+                            Text(prospect.emailAddress)
+                                .foregroundColor(.secondary)
                         }
-                        
-                        if !prospect.isContacted {
-                            Button("Remind me") {
-                                addNotifications(for: prospect)
+                        .contextMenu(ContextMenu(menuItems: {
+                            Button(prospect.isContacted ? "Mark Uncontacted" : "Mark Contacted") {
+                                prospects.toggle(prospect)
                             }
+
+                            if !prospect.isContacted {
+                                Button("Remind me") {
+                                    addNotifications(for: prospect)
+                                }
+                            }
+                        }))
+
+                        Spacer()
+
+                        if filter == .none && prospect.isContacted {
+                            Image(systemName: "checkmark.seal.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.blue)
                         }
-                    }))
+                    }
                 }
             }
             .navigationBarTitle(title)
-            .navigationBarItems(trailing: Button(action: {
-                self.isShowingScanner = true
-            }, label: {
-                Image(systemName: "qrcode.viewfinder")
-                Text("Scan")
-            }))
+            .navigationBarItems(leading:
+                Button(action: {
+                    isShowingSort = true
+                }, label: {
+                    Image(systemName: "arrow.up.arrow.down.square.fill")
+                    Text("Sort")
+                })
+                , trailing: Button(action: {
+                    self.isShowingScanner = true
+                }, label: {
+                    Image(systemName: "qrcode.viewfinder")
+                    Text("Scan")
+                }))
             .sheet(isPresented: $isShowingScanner, content: {
                 CodeScannerView(codeTypes: [.qr], simulatedData: "Paul Hudson\npaul@hackingwithswift.com", completion: handleScan)
+            })
+            .actionSheet(isPresented: $isShowingSort, content: {
+                ActionSheet(title: Text("Sort by"), message: nil, buttons: [
+                    .default(Text("Name")) { sortFilter = .name },
+                    .default(Text("Most recent")) { sortFilter = .mostRecent },
+                    .cancel()
+                ])
             })
         }
     }
@@ -89,36 +142,41 @@ struct ProspectsView: View {
             person.name = details[0]
             person.emailAddress = details[1]
             prospects.add(person)
+
+            let person1 = Prospect()
+            person1.name = "Manel"
+            person1.emailAddress = "manel@apple.com"
+            prospects.add(person1)
         case let .failure(error):
             print(error.localizedDescription)
         }
     }
-    
+
     func addNotifications(for prospect: Prospect) {
         let center = UNUserNotificationCenter.current()
-        
+
         let addRequest = {
             let content = UNMutableNotificationContent()
             content.title = "Contact \(prospect.name)"
             content.subtitle = prospect.emailAddress
             content.sound = UNNotificationSound.default
-            
+
 //            var dateComponents = DateComponents()
 //            dateComponents.hour = 9
 //            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-            
+
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-            
+
             let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-            
+
             center.add(request)
         }
-        
+
         center.getNotificationSettings { settings in
             if settings.authorizationStatus == .authorized {
                 addRequest()
             } else {
-                center.requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                center.requestAuthorization(options: [.alert, .badge, .sound]) { success, _ in
                     if success {
                         addRequest()
                     } else {
@@ -132,6 +190,9 @@ struct ProspectsView: View {
 
 struct ProspectsView_Previews: PreviewProvider {
     static var previews: some View {
+        var prospects = Prospects()
+
         ProspectsView(filter: .none)
+            .environmentObject(prospects)
     }
 }

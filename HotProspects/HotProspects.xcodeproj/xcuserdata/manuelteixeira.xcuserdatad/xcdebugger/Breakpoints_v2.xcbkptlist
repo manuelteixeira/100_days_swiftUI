@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "EC92BEA5-5787-4DF3-8721-2F5E8CC31CF9"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "335E5022-542B-483C-AD9A-8BFFBCBACCD1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HotProspects/ProspectsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "filterProspects"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "335E5022-542B-483C-AD9A-8BFFBCBACCD1 - 6ef31e34bb272cf0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "HotProspects.ProspectsView.filterProspects.getter : Swift.Array&lt;HotProspects.Prospect&gt;"
+                  moduleName = "HotProspects"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/manuelteixeira/Work/100_days_swiftUI/HotProspects/HotProspects/ProspectsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "268">
+               </Location>
+               <Location
+                  uuid = "335E5022-542B-483C-AD9A-8BFFBCBACCD1 - e61b475eea277476"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (HotProspects.Prospect, HotProspects.Prospect) -&gt; Swift.Bool in HotProspects.ProspectsView.filterProspects.getter : Swift.Array&lt;HotProspects.Prospect&gt;"
+                  moduleName = "HotProspects"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/manuelteixeira/Work/100_days_swiftUI/HotProspects/HotProspects/ProspectsView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "123">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
