@@ -5,24 +5,23 @@
 //  Created by Manuel Teixeira on 18/02/2021.
 //
 
-import CoreHaptics
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
+    
     var body: some View {
-        VStack {
-            Text("Hello")
+        HStack {
+            if differentiateWithoutColor {
+                Image(systemName: "checkmark.circle")
+            }
             
-            Spacer()
-                .frame(height: 100)
-            
-            Text("World")
+            Text("Success")
         }
-        .contentShape(Rectangle())
-        .onTapGesture {
-            print("Tapped")
-        }
-        
+        .padding()
+        .background(differentiateWithoutColor ? Color.black : Color.green)
+        .foregroundColor(.white)
+        .clipShape(Capsule())
     }
 }
 
