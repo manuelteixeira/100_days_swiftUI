@@ -7,21 +7,39 @@
 
 import SwiftUI
 
+extension View {
+    func stacked(at position: Int, in total: Int) -> some View {
+        let offset = CGFloat(total - position)
+        return self.offset(CGSize(width: 0, height: offset * 10))
+    }
+}
+
 struct ContentView: View {
-    @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
+    @State private var cards = [Card](repeating: Card.example, count: 10)
     
     var body: some View {
-        HStack {
-            if differentiateWithoutColor {
-                Image(systemName: "checkmark.circle")
+        ZStack {
+            Image("background")
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+            VStack {
+                ZStack {
+                    ForEach(0..<cards.count, id: \.self) { index in
+                        CardView(card: cards[index]) {
+                            withAnimation {
+                                removeCard(at: index)
+                            }
+                        }
+                            .stacked(at: index, in: cards.count)
+                    }
+                }
             }
-            
-            Text("Success")
         }
-        .padding()
-        .background(differentiateWithoutColor ? Color.black : Color.green)
-        .foregroundColor(.white)
-        .clipShape(Capsule())
+    }
+    
+    func removeCard(at index: Int) {
+        cards.remove(at: index)
     }
 }
 
