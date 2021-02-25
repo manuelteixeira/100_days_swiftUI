@@ -7,14 +7,18 @@
 
 import SwiftUI
 
+enum CardResponse {
+    case correct, wrong
+}
+
 struct CardView: View {
     let card: Card
-    var removal: (() -> Void)?
+    var removal: ((CardResponse) -> Void)?
 
     @State private var isShowingAnswer = false
     @State private var offset = CGSize.zero
     @State private var feedback = UINotificationFeedbackGenerator()
-    
+
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
     @Environment(\.accessibilityEnabled) var accessibilityEnabled
 
@@ -45,12 +49,12 @@ struct CardView: View {
                     Text(card.prompt)
                         .font(.largeTitle)
                         .foregroundColor(.black)
-                    
+
                     if isShowingAnswer {
                         Text(card.answer)
                             .font(.title)
                             .foregroundColor(.gray)
-                    }                    
+                    }
                 }
             }
             .padding(20)
@@ -71,11 +75,13 @@ struct CardView: View {
                     if abs(offset.width) > 100 {
                         if offset.width > 0 {
                             feedback.notificationOccurred(.success)
+                            removal?(.correct)
                         } else {
                             feedback.notificationOccurred(.error)
+                            removal?(.wrong)
                         }
-                        removal?()
                         
+
                     } else {
                         offset = .zero
                     }

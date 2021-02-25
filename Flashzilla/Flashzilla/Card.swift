@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Card: Codable {
+struct Card: Codable, Hashable {
     let prompt: String
     var answer: String
 

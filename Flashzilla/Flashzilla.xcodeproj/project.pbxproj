@@ -16,6 +16,7 @@
 		6F95C85425DEC421002052E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F95C85325DEC421002052E3 /* Assets.xcassets */; };
 		6F95C85725DEC421002052E3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F95C85625DEC421002052E3 /* Preview Assets.xcassets */; };
 		6F95C85A25DEC421002052E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F95C85825DEC421002052E3 /* LaunchScreen.storyboard */; };
+		6F9BE0E525E8035700035943 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F9BE0E425E8035700035943 /* SettingsView.swift */; };
 		6FA4356425E6B27300CD43CE /* EditCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA4356325E6B27300CD43CE /* EditCards.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		6F95C85625DEC421002052E3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6F95C85925DEC421002052E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6F95C85B25DEC421002052E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6F9BE0E425E8035700035943 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6FA4356325E6B27300CD43CE /* EditCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCards.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,6 +72,7 @@
 				6FA4356325E6B27300CD43CE /* EditCards.swift */,
 				6F616DFF25E3AB98007191DF /* CardView.swift */,
 				6F95C84E25DEC41F002052E3 /* ContentView.swift */,
+				6F9BE0E425E8035700035943 /* SettingsView.swift */,
 				6F95C85325DEC421002052E3 /* Assets.xcassets */,
 				6F95C85825DEC421002052E3 /* LaunchScreen.storyboard */,
 				6F95C85B25DEC421002052E3 /* Info.plist */,
@@ -158,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F95C84B25DEC41F002052E3 /* AppDelegate.swift in Sources */,
+				6F9BE0E525E8035700035943 /* SettingsView.swift in Sources */,
 				6F95C85225DEC41F002052E3 /* Flashzilla.xcdatamodeld in Sources */,
 				6F616DFD25E3AAB9007191DF /* Card.swift in Sources */,
 				6FA4356425E6B27300CD43CE /* EditCards.swift in Sources */,

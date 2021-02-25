@@ -14,17 +14,24 @@ extension View {
     }
 }
 
+enum SheetType {
+    case edit, settings
+}
+
 struct ContentView: View {
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentianteWithoutColor
     @Environment(\.accessibilityEnabled) var accessibilityEnabled
-    
+    @StateObject var settings = UserSettings()
+
     @State private var cards = [Card]()
 
     @State private var isActive = true
 
     @State private var timeRemaining = 100
-    @State private var showingEditScreen = false
-    
+    @State private var showingSheet = false
+    @State private var sheetType = SheetType.edit
+    @State private var showingEndTimerMessage = false
+
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
@@ -34,21 +41,43 @@ struct ContentView: View {
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
             VStack {
-                Text("Time: \(timeRemaining)")
-                    .font(.largeTitle)
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 5)
-                    .background(
-                        Capsule()
-                            .fill(Color.black)
-                            .opacity(0.75)
-                    )
+                if showingEndTimerMessage {
+                    Text("Time has ended")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 5)
+                        .background(
+                            Capsule()
+                                .fill(Color.black)
+                                .opacity(0.75)
+                        )
+                } else {
+                    Text("Time: \(timeRemaining)")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 5)
+                        .background(
+                            Capsule()
+                                .fill(Color.black)
+                                .opacity(0.75)
+                        )
+                }
                 ZStack {
                     ForEach(0 ..< cards.count, id: \.self) { index in
-                        CardView(card: cards[index]) {
+                        CardView(card: cards[index]) { response in
                             withAnimation {
-                                removeCard(at: index)
+                                if settings.isGoBackToStack {
+                                    switch response {
+                                    case .correct:
+                                        removeCard(at: index)
+                                    case .wrong:
+                                        returnToStack(from: index)
+                                    }
+                                } else {
+                                    removeCard(at: index)
+                                }
                             }
                         }
                         .stacked(at: index, in: cards.count)
@@ -66,21 +95,32 @@ struct ContentView: View {
                         .clipShape(Capsule())
                 }
             }
-            
+
             VStack {
                 HStack {
                     Spacer()
-                    
+
                     Button(action: {
-                        showingEditScreen = true
+                        showingSheet = true
+                        sheetType = .edit
                     }) {
                         Image(systemName: "plus.circle")
                             .padding()
                             .background(Color.black.opacity(0.7))
                             .clipShape(Circle())
                     }
+
+                    Button(action: {
+                        showingSheet = true
+                        sheetType = .settings
+                    }) {
+                        Image(systemName: "gearshape")
+                            .padding()
+                            .background(Color.black.opacity(0.7))
+                            .clipShape(Circle())
+                    }
                 }
-                
+
                 Spacer()
             }
             .foregroundColor(.white)
@@ -106,7 +146,7 @@ struct ContentView: View {
                         .accessibility(hint: Text("Mark your answer as being incorrect"))
 
                         Spacer()
-                        
+
                         Button(action: {
                             withAnimation {
                                 removeCard(at: cards.count - 1)
@@ -119,7 +159,6 @@ struct ContentView: View {
                         }
                         .accessibility(label: Text("Correct"))
                         .accessibility(hint: Text("Mark your answer as being correct"))
-
                     }
                     .foregroundColor(.white)
                     .font(.largeTitle)
@@ -132,6 +171,8 @@ struct ContentView: View {
 
             if timeRemaining > 0 {
                 timeRemaining -= 1
+            } else {
+                showingEndTimerMessage = true
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
@@ -142,15 +183,25 @@ struct ContentView: View {
                 isActive = true
             }
         }
-        .sheet(isPresented: $showingEditScreen, onDismiss: resetCards, content: {
-            EditCards()
+        .sheet(isPresented: $showingSheet, onDismiss: {
+            if sheetType == .edit {
+                resetCards()
+            }
+        }, content: {
+            switch sheetType {
+            case .edit:
+                EditCards()
+            case .settings:
+                SettingsView()
+                    .environmentObject(settings)
+            }
         })
         .onAppear(perform: resetCards)
     }
 
     func removeCard(at index: Int) {
         guard index >= 0 else { return }
-        
+
         cards.remove(at: index)
 
         if cards.isEmpty {
@@ -158,17 +209,24 @@ struct ContentView: View {
         }
     }
 
+    func returnToStack(from index: Int) {
+        let card = cards[index]
+        removeCard(at: index)
+        cards.append(card)
+    }
+
     func resetCards() {
         cards = [Card]()
         timeRemaining = 100
+        showingEndTimerMessage = false
         isActive = true
         loadData()
     }
-    
+
     func loadData() {
         if let data = UserDefaults.standard.data(forKey: "Cards") {
             if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
-                self.cards = decoded
+                cards = decoded
             }
         }
     }
