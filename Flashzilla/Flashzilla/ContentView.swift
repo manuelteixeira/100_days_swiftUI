@@ -212,7 +212,9 @@ struct ContentView: View {
     func returnToStack(from index: Int) {
         let card = cards[index]
         removeCard(at: index)
-        cards.append(card)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            cards.insert(card, at: 0)
+        }
     }
 
     func resetCards() {
