@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var usedWords = [String]()
+    @State private var usedWords = [String](repeating: "Hey", count: 20)
     @State private var rootWord = ""
     @State private var newWord = ""
 
@@ -27,13 +27,21 @@ struct ContentView: View {
                     .autocapitalization(.none)
                     .padding()
 
-                List(usedWords, id: \.self) { word in
-                    HStack {
-                        Image(systemName: "\(word.count).circle")
-                        Text(word)
+                GeometryReader { fullView in
+                    List(usedWords, id: \.self) { word in
+                        GeometryReader { geo in
+                            Text("\(geo.frame(in: .global).maxY)")
+                            HStack {
+                                Image(systemName: "\(word.count).circle")
+                                Text(word)
+                            }
+//                            .offset(x: max(0, (geo.frame(in: .global).maxY / fullView.size.height) * (geo.frame(in: .global).maxY - 800)))
+                            .offset(x: max(0, (geo.frame(in: .global).maxY - 850)))
+                            .accessibilityElement(children: .ignore)
+                            .accessibility(label: Text("\(word), \(word.count) letters"))
+                            .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
+                        }
                     }
-                    .accessibilityElement(children: .ignore)
-                    .accessibility(label: Text("\(word), \(word.count) letters"))
                 }
 
                 Text("Your score is \(score)")
