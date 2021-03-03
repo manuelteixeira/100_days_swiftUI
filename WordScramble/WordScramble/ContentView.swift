@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var usedWords = [String](repeating: "Hey", count: 20)
+    @State private var usedWords = [String](repeating: "Hey", count: 50)
     @State private var rootWord = ""
     @State private var newWord = ""
 
@@ -19,6 +19,14 @@ struct ContentView: View {
 
     @State private var score = 0
 
+    fileprivate func getForegroundColor(for index: Int, scrollValue: CGFloat) -> Color {
+        let colorHue = Double(index) / Double(usedWords.count) + Double(scrollValue / 1000)
+        
+        let color = Color(hue: colorHue, saturation: 0.7, brightness: 0.7)
+
+        return color
+    }
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -28,17 +36,19 @@ struct ContentView: View {
                     .padding()
 
                 GeometryReader { fullView in
-                    List(usedWords, id: \.self) { word in
+                    List(usedWords.indices, id: \.self) { index in
+                        
                         GeometryReader { geo in
                             Text("\(geo.frame(in: .global).maxY)")
                             HStack {
-                                Image(systemName: "\(word.count).circle")
-                                Text(word)
+                                Image(systemName: "\(usedWords[index].count).circle")
+                                    .foregroundColor(getForegroundColor(for: index, scrollValue: geo.frame(in: .global).minY))
+                                Text(usedWords[index])
                             }
-//                            .offset(x: max(0, (geo.frame(in: .global).maxY / fullView.size.height) * (geo.frame(in: .global).maxY - 800)))
+                            .offset(x: max(0, (geo.frame(in: .global).maxY / fullView.size.height) * (geo.frame(in: .global).maxY - 800)))
                             .offset(x: max(0, (geo.frame(in: .global).maxY - 850)))
                             .accessibilityElement(children: .ignore)
-                            .accessibility(label: Text("\(word), \(word.count) letters"))
+                            .accessibility(label: Text("\(usedWords[index]), \(usedWords[index].count) letters"))
                             .frame(width: geo.size.width, height: geo.size.height, alignment: .center)
                         }
                     }
